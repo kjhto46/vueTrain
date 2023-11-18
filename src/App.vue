@@ -9,7 +9,7 @@
     <img src="./assets/logo.png" class="logo" />
   </div>
 
-  <Container :instarData="instarData" />
+  <Container :instarData="instarData" :step="step" />
   <button @click="more">more</button>
 
   <div class="footer">
@@ -18,35 +18,46 @@
       <label for="file" class="input-plus">+</label>
     </ul>
   </div>
+
+  <div v-if="stepNum == 0">내용0</div>
+  <div v-if="stepNum == 1">내용1</div>
+  <div v-if="stepNum == 2">내용2</div>
+  <button @click="stepNum = 0">버튼0</button>
+  <button @click="stepNum = 1">버튼1</button>
+  <button @click="stepNum = 2">버튼2</button>
+
 </template>
 
 <script>
-import Container from "./components/Container.vue"
-import instar from "./data/instar.js"
-import axios from "axios"
+import Container from "./components/Container.vue";
+import instar from "./data/instar.js";
+import axios from "axios";
 
 export default {
   name: "App",
-  data(){
+  data() {
     return {
-      instarData : instar,
-      pushNum : 0,
-    }
+      instarData: instar,
+      pushNum: 0,
+      stepNum :0,
+      step : 0,
+    };
   },
   components: {
     Container,
   },
-  methods:{
+  methods: {
     more() {
-      axios.get(`https://codingapple1.github.io/vue/more${this.pushNum}.json`)
-      .then((result)=>{
-        console.log(result.data)
-        console.log(this.instarData)
-        this.pushNum ++
-        this.instarData.push(result.data)
-      })
-    }
-  }
+      axios
+        .get(`https://codingapple1.github.io/vue/more${this.pushNum}.json`)
+        .then((result) => {
+          console.log(result.data);
+          console.log(this.instarData);
+          this.pushNum++;
+          this.instarData.push(result.data);
+        });
+    },
+  },
 };
 </script>
 
