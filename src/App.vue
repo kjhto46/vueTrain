@@ -10,6 +10,7 @@
   </div>
 
   <Container :instarData="instarData" />
+  <button @click="more">more</button>
 
   <div class="footer">
     <ul class="footer-button-plus">
@@ -21,18 +22,31 @@
 
 <script>
 import Container from "./components/Container.vue"
-import instar from "./data/instar"
+import instar from "./data/instar.js"
+import axios from "axios"
 
 export default {
   name: "App",
   data(){
     return {
-      instarData : instar
+      instarData : instar,
+      pushNum : 0,
     }
   },
   components: {
     Container,
   },
+  methods:{
+    more() {
+      axios.get(`https://codingapple1.github.io/vue/more${this.pushNum}.json`)
+      .then((result)=>{
+        console.log(result.data)
+        console.log(this.instarData)
+        this.pushNum ++
+        this.instarData.push(result.data)
+      })
+    }
+  }
 };
 </script>
 
