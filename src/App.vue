@@ -4,17 +4,32 @@
       <li>Cancel</li>
     </ul>
     <ul class="header-button-right">
-      <li>Next</li>
+      <li v-if="step == 1" @click="step++">Next</li>
+      <li v-if="step == 2" @click="publish">발행</li>
     </ul>
     <img src="./assets/logo.png" class="logo" />
   </div>
 
-  <Container :instarData="instarData" :step="step" />
+  <Container
+    :instarData="instarData"
+    :step="step"
+    :이미지="이미지"
+    @writeTxt="
+      작성한글 = $event;
+      console.log($event);
+    "
+  />
   <button @click="more">more</button>
 
   <div class="footer">
     <ul class="footer-button-plus">
-      <input type="file" id="file" class="inputfile" />
+      <input
+        @change="upload"
+        accept="image/*"
+        type="file"
+        id="file"
+        class="inputfile"
+      />
       <label for="file" class="input-plus">+</label>
     </ul>
   </div>
@@ -25,7 +40,6 @@
   <button @click="stepNum = 0">버튼0</button>
   <button @click="stepNum = 1">버튼1</button>
   <button @click="stepNum = 2">버튼2</button>
-
 </template>
 
 <script>
@@ -39,14 +53,30 @@ export default {
     return {
       instarData: instar,
       pushNum: 0,
-      stepNum :0,
-      step : 0,
+      stepNum: 0,
+      step: 0,
+      이미지: "",
+      작성한글: "",
     };
   },
   components: {
     Container,
   },
   methods: {
+    publish() {
+      let 내게시물 = {
+        name: "권준희",
+        userImage: "https://picsum.photos/100?random=1",
+        postImage: this.이미지,
+        likes: null,
+        date: "May 15",
+        liked: false,
+        content: this.작성한글,
+        filter: "perpetua",
+      };
+      this.instarData.unshift(내게시물);
+      this.step = 0;
+    },
     more() {
       axios
         .get(`https://codingapple1.github.io/vue/more${this.pushNum}.json`)
@@ -56,6 +86,13 @@ export default {
           this.pushNum++;
           this.instarData.push(result.data);
         });
+    },
+    upload(e) {
+      let 파일 = e.target.files;
+      console.log(파일[0]);
+      let url = URL.createObjectURL(파일[0]);
+      this.이미지 = url;
+      this.step = 1;
     },
   },
 };
