@@ -6,19 +6,26 @@
 
     <div v-if="step == 1">
       <!-- 필터선택페이지 -->
-      <div class="upload-image" :style="{backgroundImage : `url(${이미지})`}"></div>
+      <div
+      :class="선택한필터"
+        class="upload-image"
+        :style="{ backgroundImage: `url(${이미지})` }"
+      ></div>
       <div class="filters">
-        <div class="filter-1"></div>
-        <div class="filter-1"></div>
-        <div class="filter-1"></div>
-        <div class="filter-1"></div>
-        <div class="filter-1"></div>
+        <FilterBox v-for="(필터, i) in imgFilter" :key="필터" :imgFilter="imgFilter[i]" :이미지="이미지">
+          <template v-slot:a> {{ i }}</template>
+          <template v-slot:b> {{필터}}</template>
+        </FilterBox>
       </div>
     </div>
 
     <div v-if="step == 2">
       <!-- 글작성페이지 -->
-      <div class="upload-image" :style="{backgroundImage : `url(${이미지})`}"></div>
+      <div
+      :class="선택한필터"
+        class="upload-image"
+        :style="{ backgroundImage: `url(${이미지})` }"
+      ></div>
       <div class="write">
         <textarea @input="wrtieTxt" class="write-box">write!</textarea>
       </div>
@@ -27,21 +34,56 @@
 </template>
 <script>
 import Post from "./Post.vue";
+import FilterBox from "./FilterBox.vue";
 export default {
   name: "ContainerI",
+  data() {
+    return {
+      imgFilter: [
+        "aden",
+        "_1977",
+        "brannan",
+        "brooklyn",
+        "clarendon",
+        "earlybird",
+        "gingham",
+        "hudson",
+        "inkwell",
+        "kelvin",
+        "lark",
+        "lofi",
+        "maven",
+        "mayfair",
+        "moon",
+        "nashville",
+        "perpetua",
+        "reyes",
+        "rise",
+        "slumber",
+        "stinson",
+        "toaster",
+        "valencia",
+        "walden",
+        "willow",
+        "xpro2",
+      ],
+    };
+  },
   components: {
     Post,
+    FilterBox,
   },
   props: {
     instarData: Object,
     step: Number,
-    이미지:String,
+    이미지: String,
+    선택한필터: String,
   },
-  methods : {
-    wrtieTxt(event){
-      this.$emit('writeTxt', event.target.value)
-    }
-  }
+  methods: {
+    wrtieTxt(event) {
+      this.$emit("writeTxt", event.target.value);
+    },
+  },
 };
 </script>
 <style>

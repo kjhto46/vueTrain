@@ -14,6 +14,7 @@
     :instarData="instarData"
     :step="step"
     :이미지="이미지"
+    :선택한필터="선택한필터"
     @writeTxt="
       작성한글 = $event;
       console.log($event);
@@ -57,7 +58,14 @@ export default {
       step: 0,
       이미지: "",
       작성한글: "",
+      선택한필터: "",
     };
+  },
+  mounted(){
+    this.emitter.on('fireFilterName', (a)=>{
+      this.선택한필터 = a
+      console.log(this.선택한필터)
+    })
   },
   components: {
     Container,
@@ -72,7 +80,7 @@ export default {
         date: "May 15",
         liked: false,
         content: this.작성한글,
-        filter: "perpetua",
+        filter: this.선택한필터,
       };
       this.instarData.unshift(내게시물);
       this.step = 0;
